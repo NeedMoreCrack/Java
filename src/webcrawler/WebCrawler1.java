@@ -24,20 +24,19 @@ public class WebCrawler1 {
         int len;
         while((len=isr.read(b)) != -1){
             sb.append(b,0,len);
-//            System.out.println(len);
         }
-//        System.out.println(sb);
         Pattern pattern = Pattern.compile("font-weight-bold etw-color-red\">(\\d{8})<|<span class=\"font-weight-bold\">(\\d{5})<|etw-color-red\">(\\d{3})<");
         Matcher matcher = pattern.matcher(sb.toString());
         while(matcher.find()){
-            sb2.append(matcher.group(1) == null ? "," : matcher.group(1));
-            sb2.append(matcher.group(2) == null ? "," : matcher.group(2));
-            sb2.append(matcher.group(3) == null ? "," : matcher.group(3));
+            if(matcher.group(1) != null){
+                sb2.append(matcher.group(1)).append(",");
+            }else if(matcher.group(2) != null){
+                sb2.append(matcher.group(2)).append(",");
+            }else if(matcher.group(3) != null){
+                sb2.append(matcher.group(3));
+            }
         }
-        list.add(sb2.toString().replace(","," "));
-        Set<String> hs = new HashSet<>();
-        hs.add(sb.toString());
-        System.out.println(hs);
+        list.add(sb2.toString());
         return list;
     }
 }
