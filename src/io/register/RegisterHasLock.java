@@ -2,6 +2,8 @@ package io.register;
 
 import java.io.*;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class RegisterHasLock {
     public static void main(String[] args) throws IOException {
@@ -18,7 +20,13 @@ public class RegisterHasLock {
         String loginInfo = loginStatus ? "Login success" : "Login failed";
         System.out.println(loginInfo);
 */
-        addLock("kelly",path);
+/*
+        username=andy&password=123
+        username=kelly&password=322
+*/
+        //addLock("kelly",path);
+//        addErrorCount("andy",path);
+        System.out.println(getErrorCount("andy", path));
     }
     public static Map<String,String> getInfo(String path) throws IOException {
         BufferedReader br = new BufferedReader(new FileReader(path));
@@ -42,14 +50,38 @@ public class RegisterHasLock {
         }
         br.close();
         BufferedWriter bw = new BufferedWriter(new FileWriter(path));
-        int errorCount = 0;
         for (String s : list) {
-            bw.write(String.valueOf(s.matches(".+"+name+".+")));
+            if(s.contains(name)){
+                Pattern p = Pattern.compile("(.*\\s)(\\d)$");
+                Matcher m = p.matcher(s);
+                if(m.find()){
+                    int errorCountNum = Integer.parseInt(m.group(2));
+                    errorCountNum++;
+                    bw.write(m.group(1)+errorCountNum);
+                    bw.newLine();
+                }
+            }else{
+                bw.write(s);
+                bw.newLine();
+            }
         }
+        bw.close();
     }
-    public static void getErrorCount(String name,String path) throws IOException {
+    public static int getErrorCount(String name,String path) throws IOException {
         BufferedReader br = new BufferedReader(new FileReader(path));
-
+        int getErrorCount = 0;
+        String line;
+        while((line= br.readLine()) != null){
+            if(line.contains(name)){
+                Pattern p = Pattern.compile("(.*\\s)(\\d)$");
+                Matcher m = p.matcher(line);
+                if(m.find()){
+                    getErrorCount = Integer.parseInt(m.group(2));
+                }
+            }
+        }
+        br.close();
+        return getErrorCount;
     }
     public static void addLock(String name,String path) throws IOException {
         BufferedReader br = new BufferedReader(new FileReader(path));
