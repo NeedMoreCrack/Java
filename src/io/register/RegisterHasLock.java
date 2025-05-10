@@ -26,7 +26,7 @@ public class RegisterHasLock {
 */
         //addLock("kelly",path);
 //        addErrorCount("andy",path);
-        System.out.println(getErrorCount("andy", path));
+        System.out.println(getUserErrorCount("kelly", path));
     }
     public static Map<String,String> getInfo(String path) throws IOException {
         BufferedReader br = new BufferedReader(new FileReader(path));
@@ -67,7 +67,7 @@ public class RegisterHasLock {
         }
         bw.close();
     }
-    public static int getErrorCount(String name,String path) throws IOException {
+    public static int getUserErrorCount(String name, String path) throws IOException {
         BufferedReader br = new BufferedReader(new FileReader(path));
         int getErrorCount = 0;
         String line;
