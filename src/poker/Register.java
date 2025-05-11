@@ -43,7 +43,7 @@ public class Register extends JFrame{
         registerButton.setBounds(180,320,100,35);
 
         //Button Action
-        registerButton.addActionListener(e -> showError(checkRegister(accountEnter.getText(),passwordEnter.getPassword(),confirmPasswordEnter.getPassword(),login.userInfoArr)));
+/*        registerButton.addActionListener(e -> showError(checkRegister(accountEnter.getText(),passwordEnter.getPassword(),confirmPasswordEnter.getPassword(),login.userInfoArr)));
         backToLoginPageButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -51,7 +51,7 @@ public class Register extends JFrame{
 
                 login.setVisible(true);
             }
-        });
+        });*/
 
         //add to JFrame
         this.getContentPane();
@@ -76,7 +76,8 @@ public class Register extends JFrame{
         this.setVisible(true);
     }
 
-    public int checkRegister(String account,char[] password,char[] confirmPassword,Map<String,String> userInfoArr){
+/*
+    public int checkRegister(String account,char[] password,char[] confirmPassword,Set<Map<String,Map<String,String>>> userInfoArr){
         Set<Map.Entry<String, String>> entries = userInfoArr.entrySet();
         String pw = new String(password);
         String pw2 = new String(confirmPassword);
@@ -100,6 +101,7 @@ public class Register extends JFrame{
         }
         return 0;
     }
+*/
 
     public void showError(int errorNum){
         //Show error

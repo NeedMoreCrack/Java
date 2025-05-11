@@ -3,22 +3,47 @@ package poker;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.*;
 
 public class Login extends JFrame {
-    Map<String,String> userInfoArr = new HashMap<>();
+    Set<Map<String,Map<Map<String,String>,Map<String,String>>>> userInfoArr = new HashSet<>();
     JLabel errorInfo = new JLabel();
     JLabel captchaShow = new JLabel();
     String captchaReturnText = "";
 
-    Login(){
+    Login() throws IOException {
 //        userInfoArr.put("abc","123");//Test user
+        userInfoArr.add(getUserInfo());
+        System.out.println(userInfoArr);
         captcha();
         initJFrame();
         loginPage();
         this.setVisible(true);
 //        showMouseXY();
-    };
+    }
+
+    public Map<String,Map<Map<String,String>,Map<String,String>>> getUserInfo() throws IOException {
+        Map<String,Map<Map<String,String>,Map<String,String>>> userNameAndUserInfo = new HashMap<>();
+        Map<Map<String,String>,Map<String,String>> userPwAndErrorCount = new HashMap<>();
+        Map<String,String> userPassword = new HashMap<>();
+        Map<String,String> userErrorCount = new HashMap<>();
+        BufferedReader br = new BufferedReader(new FileReader("src/poker/userinfo.txt"));
+        String line;
+        while((line=br.readLine()) != null){
+            String[] userInfoArr = line.split("&");
+            String name = userInfoArr[0].split("=")[1];
+            String password = userInfoArr[1].split("=")[1];
+            String errorCount = userInfoArr[2].split("=")[1];
+            userPassword.put("password",password);
+            userErrorCount.put("errorCount",errorCount);
+            userPwAndErrorCount.put(userPassword,userErrorCount);
+            userNameAndUserInfo.put(name,userPwAndErrorCount);
+        }
+        return userNameAndUserInfo;
+    }
 
     public void captcha(){
         captchaShow.setBounds(240,300,100,35);
@@ -49,7 +74,7 @@ public class Login extends JFrame {
         this.add(captchaShow);
     }
 
-    public void checkLogin(String account,char[] password,String captcha,String captchaText,Map<String,String> userInfoArr){
+/*    public void checkLogin(String account,char[] password,String captcha,String captchaText,Set<Map<String,Map<String,String>>> userInfoArr){
         Set<Map.Entry<String, String>> entries = userInfoArr.entrySet();
         String getPassword = new String(password);
         if (!captcha.equals(captchaText)) {
@@ -78,7 +103,7 @@ public class Login extends JFrame {
                 }
             }
         }
-    }
+    }*/
 
     public void showError(int errorNum){
         //Show error
@@ -137,13 +162,13 @@ public class Login extends JFrame {
                 captcha();
             }
         });
-        loginButton.addActionListener(e->checkLogin(
+/*        loginButton.addActionListener(e->checkLogin(
             accountEnter.getText().trim().isEmpty()  ? "" : accountEnter.getText(),
             passwordEnter.getPassword(),
             captchaEnter.getText().trim().isEmpty() ? "" : captchaEnter.getText(),
             captchaReturnText,
             userInfoArr
-        ));
+        ));*/
         registerButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
