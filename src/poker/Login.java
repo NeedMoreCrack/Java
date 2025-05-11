@@ -105,6 +105,8 @@ public class Login extends JFrame {
                         timer.setRepeats(false);
                         timer.start();
                     }
+                }else{
+                    showError(-1);
                 }
             }
         }
