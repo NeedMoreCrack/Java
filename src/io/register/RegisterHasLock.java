@@ -106,8 +106,7 @@ public class RegisterHasLock {
                 Pattern p = Pattern.compile("(.*=)(\\d)$");
                 Matcher m = p.matcher(s);
                 if(m.find()){
-                    int errorCountNum = Integer.parseInt(m.group(2));
-                    errorCountNum=0;
+                    int errorCountNum = 0;
                     bw.write(m.group(1)+errorCountNum);
                     bw.newLine();
                 }
