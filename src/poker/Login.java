@@ -7,17 +7,17 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
+import java.util.List;
 
 public class Login extends JFrame {
-    Set<Map<String,Map<Map<String,String>,Map<String,String>>>> userInfoArr = new HashSet<>();
+    List<Users> userInfoArr = new ArrayList<>();
     JLabel errorInfo = new JLabel();
     JLabel captchaShow = new JLabel();
     String captchaReturnText = "";
 
     Login() throws IOException {
-//        userInfoArr.put("abc","123");//Test user
-        userInfoArr.add(getUserInfo());
-        System.out.println(userInfoArr);
+        getUserInfo();//get userinfo.txt content
+        userInfoArr.forEach(System.out::println);
         captcha();
         initJFrame();
         loginPage();
@@ -25,24 +25,19 @@ public class Login extends JFrame {
 //        showMouseXY();
     }
 
-    public Map<String,Map<Map<String,String>,Map<String,String>>> getUserInfo() throws IOException {
-        Map<String,Map<Map<String,String>,Map<String,String>>> userNameAndUserInfo = new HashMap<>();
-        Map<Map<String,String>,Map<String,String>> userPwAndErrorCount = new HashMap<>();
-        Map<String,String> userPassword = new HashMap<>();
-        Map<String,String> userErrorCount = new HashMap<>();
+    public void getUserInfo() throws IOException {
         BufferedReader br = new BufferedReader(new FileReader("src/poker/userinfo.txt"));
         String line;
         while((line=br.readLine()) != null){
-            String[] userInfoArr = line.split("&");
-            String name = userInfoArr[0].split("=")[1];
-            String password = userInfoArr[1].split("=")[1];
-            String errorCount = userInfoArr[2].split("=")[1];
-            userPassword.put("password",password);
-            userErrorCount.put("errorCount",errorCount);
-            userPwAndErrorCount.put(userPassword,userErrorCount);
-            userNameAndUserInfo.put(name,userPwAndErrorCount);
+            Users users;
+            String[] userInfo = line.split("&");
+            users = new Users(
+                userInfo[0].split("=")[1],//user name
+                userInfo[1].split("=")[1],//user password
+                Integer.parseInt(userInfo[2].split("=")[1])//error count
+            );
+            userInfoArr.add(users);
         }
-        return userNameAndUserInfo;
     }
 
     public void captcha(){
@@ -74,25 +69,35 @@ public class Login extends JFrame {
         this.add(captchaShow);
     }
 
-/*    public void checkLogin(String account,char[] password,String captcha,String captchaText,Set<Map<String,Map<String,String>>> userInfoArr){
-        Set<Map.Entry<String, String>> entries = userInfoArr.entrySet();
-        String getPassword = new String(password);
-        if (!captcha.equals(captchaText)) {
+    public void checkLogin(String account,char[] password,String captcha,String captchaText,List<Users> userInfoArr){
+        if(!captcha.equals(captchaText)){
             showError(1);
-        } else {
-            if(entries.isEmpty()){
+        }else{
+            if(userInfoArr.isEmpty()){
                 showError(-1);
             }else{
-                for (Map.Entry<String, String> entry : entries) {
-                    System.out.println("enter for");
-                    String key = entry.getKey();
-                    String value = entry.getValue();
-                    System.out.println(key+"="+value);
-                    getPassword = new String(password);
-                    if (!account.equals(key) || !getPassword.equals(value)) {
+                Users nowUser = null;
+                for (Users users : userInfoArr) {
+                    if(account.equals(users.getAccount())){
+                        nowUser = users;
+                        break;
+                    }
+                }
+                if(nowUser != null){
+                    if(!account.equals(nowUser.getAccount()) && !new String(password).equals(nowUser.getPassword())){
                         showError(2);
-                    }else{
+                    } else if (account.equals(nowUser.getAccount()) && !new String(password).equals(nowUser.getPassword())) {
+                        if(nowUser.getErrorCount() >= 3){
+                            showError(4);
+                        }else{
+                            showError(3);
+                            int errorCount = nowUser.getErrorCount();
+                            nowUser.setErrorCount(++errorCount);
+                            System.out.println(nowUser);
+                        }
+                    } else if (account.equals(nowUser.getAccount()) && new String(password).equals(nowUser.getPassword())) {
                         showError(0);
+                        nowUser.setErrorCount(0);
                         javax.swing.Timer timer = new javax.swing.Timer(1500,e -> {
                             new Game(Login.this);
                             setVisible(false);
@@ -103,7 +108,7 @@ public class Login extends JFrame {
                 }
             }
         }
-    }*/
+    }
 
     public void showError(int errorNum){
         //Show error
@@ -113,6 +118,10 @@ public class Login extends JFrame {
             showErrorOrSuccess("Error captcha");
         } else if (errorNum == 2) {
             showErrorOrSuccess("Account or password error");
+        } else if (errorNum == 3) {
+            showErrorOrSuccess("Password error");
+        } else if(errorNum == 4){
+            showErrorOrSuccess("Account is locked!");
         } else if (errorNum == 0) {
             showErrorOrSuccess("Success");
         }
@@ -155,20 +164,24 @@ public class Login extends JFrame {
         loginButton.setBounds(110,370,100,35);
         registerButton.setBounds(250,370,100,35);
 
-        //Button action
+        //refresh captcha
         refreshCaptcha.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 captcha();
             }
         });
-/*        loginButton.addActionListener(e->checkLogin(
+
+        //press login button
+        loginButton.addActionListener(e->checkLogin(
             accountEnter.getText().trim().isEmpty()  ? "" : accountEnter.getText(),
             passwordEnter.getPassword(),
             captchaEnter.getText().trim().isEmpty() ? "" : captchaEnter.getText(),
             captchaReturnText,
             userInfoArr
-        ));*/
+        ));
+
+        //press register button
         registerButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

@@ -3,8 +3,8 @@ package poker;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.Map;
-import java.util.Set;
+import java.io.*;
+import java.util.List;
 
 public class Register extends JFrame{
     JLabel errorInfo = new JLabel();
@@ -43,15 +43,21 @@ public class Register extends JFrame{
         registerButton.setBounds(180,320,100,35);
 
         //Button Action
-/*        registerButton.addActionListener(e -> showError(checkRegister(accountEnter.getText(),passwordEnter.getPassword(),confirmPasswordEnter.getPassword(),login.userInfoArr)));
+        registerButton.addActionListener(e -> {
+            System.out.println("Register button clicked");
+            try {
+                showError(checkRegister(accountEnter.getText(),passwordEnter.getPassword(),confirmPasswordEnter.getPassword(),login.userInfoArr));
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
         backToLoginPageButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 setVisible(false);
-
                 login.setVisible(true);
             }
-        });*/
+        });
 
         //add to JFrame
         this.getContentPane();
@@ -76,32 +82,51 @@ public class Register extends JFrame{
         this.setVisible(true);
     }
 
-/*
-    public int checkRegister(String account,char[] password,char[] confirmPassword,Set<Map<String,Map<String,String>>> userInfoArr){
-        Set<Map.Entry<String, String>> entries = userInfoArr.entrySet();
+    public int checkRegister(String account, char[] password, char[] confirmPassword, List<Users> userInfoArr) throws IOException {
         String pw = new String(password);
         String pw2 = new String(confirmPassword);
         if(userInfoArr.isEmpty()){
             if(pw.equals(pw2)){
-                userInfoArr.put(account,pw);
+                new Users(account,pw,0);
             }else {
                 return 1;
             }
         }else {
-            for (Map.Entry<String, String> entry : entries) {
-                String key = entry.getKey();//get account
-                if (account.equals(key)) {
-                    return -1;
-                } else if (!pw.equals(pw2)) {
-                    return 1;
-                } else{
-                    userInfoArr.put(account,pw);
+            Users nowUser = null;
+            for (Users users : userInfoArr) {
+                if (account.equals(users.getAccount())){
+                    nowUser = users;
                 }
+            }
+            if(nowUser != null){
+                if(account.equals(nowUser.getAccount())){
+                    return -1;
+                } else if (!pw.equals(pw2)){
+                    return 1;
+                } else {
+                    new Users(account,pw,0);
+                    System.out.println(nowUser);
+                    addNewUserToTxTFile(account,pw);
+                }
+            }else{
+                new Users(account,pw,0);
+                userInfoArr.add(new Users(account,pw,0));
+                System.out.println(userInfoArr);
+                addNewUserToTxTFile(account,pw);
             }
         }
         return 0;
     }
-*/
+
+    public void addNewUserToTxTFile(String name, String passWord) throws IOException {
+        String path = "src/poker/userinfo.txt";
+        BufferedWriter bw = new BufferedWriter(new FileWriter(path,true));
+        String userFormat = "username="+name+"&password="+passWord+"&errorCount=0";
+        bw.newLine();
+        bw.write(userFormat);
+        bw.flush();
+        bw.close();
+    }
 
     public void showError(int errorNum){
         //Show error
