@@ -23,12 +23,13 @@ public class RegisterHasLock {
             String loginInfo = loginStatus ? "Login success" : "Login failed";
             System.out.println(loginInfo);
         }
+        sc.close();
 /*      user data
         username=andy&password=123
         username=kelly&password=321
 */
     }
-    
+
     //get users info list
     public static Map<String,String> getInfo(String path) throws IOException {
         BufferedReader br = new BufferedReader(new FileReader(path));
