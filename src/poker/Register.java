@@ -87,7 +87,8 @@ public class Register extends JFrame{
         String pw2 = new String(confirmPassword);
         if(userInfoArr.isEmpty()){
             if(pw.equals(pw2)){
-                new Users(account,pw,0);
+                userInfoArr.add(new Users(account,pw,0));
+                addNewUserToTxTFile(account,pw);
             }else {
                 return 1;
             }
@@ -99,20 +100,15 @@ public class Register extends JFrame{
                 }
             }
             if(nowUser != null){
-                if(account.equals(nowUser.getAccount())){
-                    return -1;
-                } else if (!pw.equals(pw2)){
+                return -1;
+            }else{
+                if (!pw.equals(pw2)){
                     return 1;
-                } else {
-                    new Users(account,pw,0);
-                    System.out.println(nowUser);
+                }else{
+                    userInfoArr.add(new Users(account,pw,0));
+                    System.out.println(userInfoArr);
                     addNewUserToTxTFile(account,pw);
                 }
-            }else{
-                new Users(account,pw,0);
-                userInfoArr.add(new Users(account,pw,0));
-                System.out.println(userInfoArr);
-                addNewUserToTxTFile(account,pw);
             }
         }
         return 0;
