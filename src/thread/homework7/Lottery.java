@@ -1,8 +1,6 @@
-package thread.homework6;
+package thread.homework7;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -41,6 +39,7 @@ public class Lottery implements Runnable{
         getInfo(list1,list2);
     }
     public static void getInfo(List<Integer> list1,List<Integer> list2){
+        Map<String,Integer> map = new HashMap<>();
         StringBuilder sb1 = new StringBuilder();
         int list1Sum=0;
         int getList1Max = 0;
@@ -54,6 +53,7 @@ public class Lottery implements Runnable{
             }
         }
         System.out.println("抽獎箱1總共產生了"+list1.size()+"種獎項"+sb1+"最高獎項為"+getList1Max+"元,總計為"+list1Sum+"元");
+        map.put("抽獎箱1",getList1Max);
 
         StringBuilder sb2 = new StringBuilder();
         int listSum2=0;
@@ -68,5 +68,17 @@ public class Lottery implements Runnable{
             }
         }
         System.out.println("抽獎箱2總共產生了"+list2.size()+"種獎項"+sb2+"最高獎項為"+getList2Max+",總計為"+listSum2+"元");
+        map.put("抽獎箱2",getList2Max);
+
+        String boxName="";
+        int num=0;
+        Set<Map.Entry<String, Integer>> entries = map.entrySet();
+        for (Map.Entry<String, Integer> entry : entries) {
+            if(num < entry.getValue()){
+                boxName = entry.getKey();
+                num=entry.getValue();
+            }
+        }
+        System.out.println("此抽獎過程中,"+boxName+"產生最大獎項,金額為："+num+"元");
     }
 }
