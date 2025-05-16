@@ -1,4 +1,4 @@
-package commonsio;
+package commonsIO;
 
 import org.apache.commons.io.FileUtils;
 

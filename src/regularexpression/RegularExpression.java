@@ -1,7 +1,4 @@
-package regularexpression;
-
-import java.util.ArrayList;
-import java.util.List;
+package regularExpression;
 
 public class  RegularExpression {
     public static boolean isValidEmail(String email) {

@@ -1,9 +1,6 @@
 package file;
 
-import regularexpression.Date;
-
 import java.io.File;
-import java.time.format.DateTimeFormatter;
 
 public class File1 {
     public static void main(String[] args) {

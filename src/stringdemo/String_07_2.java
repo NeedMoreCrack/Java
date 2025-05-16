@@ -1,6 +1,5 @@
-package stringdemo;
+package stringDemo;
 
-import java.util.Arrays;
 import java.util.Scanner;
 
 public class String_07_2 {
