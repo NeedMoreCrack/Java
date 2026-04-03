@@ -1,7 +1,5 @@
 package com.learn.dataStructuresAndAlgorithms;
 
-import com.learn.oop_19.Inter;
-
 import java.util.Iterator;
 import java.util.function.Consumer;
 
@@ -38,6 +36,44 @@ public class SinglyLinkedList implements Iterable<Integer> {
 
     public void addFirst(int value) {
         head = new Node(value,head);
+    }
+
+    private Node findLast(){
+        if(head == null){
+            return null;
+        }
+        Node p;
+        for(p = head;p.next != null;p = p.next){
+
+        }
+        return p;
+    }
+
+    public void addLast(int value){
+        Node last = findLast();
+        if(last == null){
+            addFirst(value);
+        }
+        last.next = new Node(value,null);
+    }
+
+    private Node findNode(int index){
+        int i = 0;
+        for(Node p = head;p != null;p = p.next){
+            if(i == index){
+                return p;
+            }
+            i++;
+        }
+        return null;
+    }
+
+    public int get(int index){
+        Node node = findNode(index);
+        if(node == null){
+            throw new IndexOutOfBoundsException(String.format("%d 超過最大索引",index));
+        }
+        return node.value;
     }
 
     public void loop1(Consumer<Integer> consumer){
