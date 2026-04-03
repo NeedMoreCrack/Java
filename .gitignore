@@ -1,0 +1,138 @@
+############################
+# Spring Boot / Java / Maven
+############################
+
+# Maven wrapper jar 通常建議提交，讓別人不用先安裝 Maven
+# 如果你不想提交，再改成解除註解
+# .mvn/wrapper/maven-wrapper.jar
+
+HELP.md
+
+############################
+# Build output
+############################
+target/
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+out/
+
+############################
+# Logs
+############################
+*.log
+logs/
+log/
+hs_err_pid*
+replay_pid*
+
+############################
+# Temp files
+############################
+*.tmp
+*.temp
+*.swp
+*.swo
+*~
+*.bak
+
+############################
+# OS generated files
+############################
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+############################
+# Env / local config
+############################
+.env
+.env.*
+*.local
+
+############################
+# IDE - STS / Eclipse
+############################
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings/
+.springBeans
+.sts4-cache
+
+############################
+# IntelliJ IDEA
+############################
+.idea/
+*.iws
+*.iml
+*.ipr
+
+############################
+# IntelliJ plugin / cache
+############################
+.idea_modules/
+atlassian-ide-plugin.xml
+
+############################
+# VS Code
+############################
+.vscode/
+
+############################
+# NetBeans
+############################
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+############################
+# Java compiled files
+############################
+*.class
+
+############################
+# Package files
+############################
+*.jar
+*.war
+*.ear
+
+# 但 Maven Wrapper 的 jar 不要忽略
+!.mvn/wrapper/maven-wrapper.jar
+
+############################
+# Testing
+############################
+/coverage/
+jacoco.exec
+.jacoco/
+surefire-reports/
+failsafe-reports/
+
+############################
+# Spring Boot runtime files
+############################
+application-*.local.yml
+application-*.local.yaml
+application-*.local.properties
+
+############################
+# Generated files
+############################
+dependency-reduced-pom.xml
+
+############################
+# Optional: upload / local runtime data
+# 如果你的專案會在本機產生上傳檔、資料庫檔、快取檔，可視情況加上
+############################
+uploads/
+temp/
+tmp/
