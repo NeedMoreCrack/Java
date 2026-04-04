@@ -3,13 +3,13 @@ package com.learn.dataStructuresAndAlgorithms;
 import java.util.Iterator;
 import java.util.function.Consumer;
 
-public class SinglyLinkedList implements Iterable<Integer> {
-    private Node head = null;
+public class SinglyLinkedListSentinel implements Iterable<Integer> {
+    private Node head = new Node(1,null);
 
     @Override
     public Iterator<Integer> iterator() {
         return new Iterator<Integer>() {
-            Node p = head;
+            Node p = head.next;
             @Override
             public boolean hasNext() {
                 return p != null;
@@ -35,13 +35,10 @@ public class SinglyLinkedList implements Iterable<Integer> {
     }
 
     public void addFirst(int value) {
-        head = new Node(value,head);
+        insert(0,value);
     }
 
     private Node findLast(){
-        if(head == null){
-            return null;
-        }
         Node p;
         for(p = head;p.next != null;p = p.next){
 
@@ -51,15 +48,11 @@ public class SinglyLinkedList implements Iterable<Integer> {
 
     public void addLast(int value){
         Node last = findLast();
-        if(last == null){
-            addFirst(value);
-            return;
-        }
         last.next = new Node(value,null);
     }
 
     private Node findNode(int index){
-        int i = 0;
+        int i = -1;
         for(Node p = head;p != null;p = p.next){
             if(i == index){
                 return p;
@@ -78,10 +71,6 @@ public class SinglyLinkedList implements Iterable<Integer> {
     }
 
     public void insert(int index, int value){
-        if(index == 0){
-            addFirst(value);
-            return;
-        }
         Node prev = findNode(index-1);
         if(prev == null){
             throw new IllegalArgumentException(String.format("無效的值: ",index));
@@ -90,17 +79,10 @@ public class SinglyLinkedList implements Iterable<Integer> {
     }
 
     public void removeFirst(){
-        if(head == null){
-            throw new IllegalArgumentException(String.format("無效的值: ",0));
-        }
-        head = head.next;
+        remove(0);
     }
 
     public void remove(int index){
-        if(index == 0){
-            removeFirst();
-            return;
-        }
         Node prev = findNode(index-1);
         if(prev == null){
             throw new IllegalArgumentException(String.format("無效的值: ",index));
@@ -110,7 +92,7 @@ public class SinglyLinkedList implements Iterable<Integer> {
     }
 
     public void loop1(Consumer<Integer> consumer){
-        Node p = head;
+        Node p = head.next;
         while (p != null){
             consumer.accept(p.value);
             p = p.next;
@@ -118,7 +100,7 @@ public class SinglyLinkedList implements Iterable<Integer> {
     }
 
     public void loop2(Consumer<Integer> consumer){
-        for(Node p = head; p != null;p = p.next){
+        for(Node p = head.next; p != null;p = p.next){
             System.out.println(p.value);
         }
     }
