@@ -36,11 +36,11 @@ public class DoubleLinkedListSentinel implements Iterable<Integer> {
     }
 
     public void addFirst(int value){
-
+        insert(0,value);
     }
 
     public void removeFirst(){
-
+        remove(0);
     }
 
     public void addLast(int value){

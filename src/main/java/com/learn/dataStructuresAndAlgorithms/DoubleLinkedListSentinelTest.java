@@ -11,7 +11,9 @@ public class DoubleLinkedListSentinelTest {
         doubleLinkedListSentinel.addFirst(1);
         doubleLinkedListSentinel.addFirst(2);
         doubleLinkedListSentinel.addFirst(3);
-//        doubleLinkedListSentinel.loop2(System.out::println);
+        for (Integer i : doubleLinkedListSentinel) {
+            System.out.println(i);
+        }
     }
 
     @Test
